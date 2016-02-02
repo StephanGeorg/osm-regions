@@ -6,7 +6,7 @@
   "private": false,
   "repository": {
     "type": "git",
-    "url": "https://github.com/StephanGeorg"
+    "url": "https://github.com/StephanGeorg/osm-regions.git"
   },
   "dependencies": {
     "bluebird": "^2.5.3",
@@ -26,6 +26,6 @@
   "author": "Stephan Georg <s.georg@nearest.place>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/StephanGeorg"
+    "url": "https://github.com/StephanGeorg/osm-regions/issues"
   }
 }

@@ -2,7 +2,7 @@
   "name": "osm-regions",
   "description": "Wrapper for the OSM regions API",
   "main": "index.js",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": false,
   "repository": {
     "type": "git",

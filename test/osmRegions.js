@@ -44,4 +44,25 @@ describe('OSMRegions API Wrapper', function(){
 
   });
 
+  describe('Validations', function() {
+
+    beforeEach(function(done){
+      osm = new OSMRegions();
+      done();
+    });
+
+    it('validate latitude', function(done) {
+      res = osm.checkLat(52.554123413243);
+      res.should.be.true();
+      done();
+    });
+
+    it('validate longitude', function(done) {
+      res = osm.checkLng(13.554123413243);
+      res.should.be.true();
+      done();
+    });
+
+  });
+
 });

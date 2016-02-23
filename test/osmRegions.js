@@ -39,7 +39,7 @@ describe('OSMRegions API Wrapper', function(){
       }).then(function(res) {
         res.should.be.a.Object;
         done();
-      })
+      });
     });
 
   });

@@ -33,7 +33,6 @@ describe('OSMRegions API Wrapper', function(){
       });
     });
 
-
     it('should return region', function(done) {
       osm.getId({
         id: 51477
@@ -41,10 +40,8 @@ describe('OSMRegions API Wrapper', function(){
         res.should.be.a.Object;
         done();
       })
+    });
 
   });
-
-
-
 
 });

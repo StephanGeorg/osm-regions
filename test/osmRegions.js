@@ -35,10 +35,12 @@ describe('OSMRegions API Wrapper', function(){
 
     it('should return region', function(done) {
       osm.getId({
-        id: 51477
+        id: 1543125,
+        fields: ['osm_id']
       }).then(function(res) {
         res.should.be.a.Object;
         done();
+      }).catch(function(err){
       });
     });
 

@@ -45,6 +45,16 @@ describe('OSMRegions API Wrapper', function(){
       }).catch(function(err){ console.log(err); });
     });
 
+    it('should return rpath for 1543125', function(done) {
+      osm.getId({
+        id: 1543125,
+        fields: ['rpath']
+      }).then(function(res) {
+        res.should.be.a.Object;
+        done();
+      }).catch(function(err){ console.log(err); });
+    });
+
     it('should return neighbours for 62771', function(done) {
       osm.getNeighbours({
         id: 62771,

@@ -1,1 +1,1 @@
-module.exports = require('./lib/osm-regions.js');
+module.exports = require('./lib/dist/regions.js');

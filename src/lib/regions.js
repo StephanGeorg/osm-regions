@@ -12,7 +12,7 @@ class RegionsJS {
   constructor (options = {}) {
 
     this.options = options;
-    this.endpoint = this.options.endpoint || 'https://api.luftlinie.org/';
+    this.endpoint = this.options.endpoint || 'https://api.luftlinie.org/api';
 
   }
 
@@ -29,9 +29,9 @@ class RegionsJS {
 
     return new Promise((resolve, reject) => {
 
-      if (!lat && !lng) reject(error(400, "Lat/Lng parameter missing"));
-      if (!checkLat(lat)) reject(error(400, "Latitude malformed"));
-      if (!checkLng(lng)) reject(error(400, "Longitude malformed"));
+      if (!lat && !lng) reject(this.error(400, "Lat/Lng parameter missing"));
+      if (!checkLat(lat)) reject(this.error(400, "Latitude malformed"));
+      if (!checkLng(lng)) reject(this.error(400, "Longitude malformed"));
 
       fields = this._fields(fields);
       if (!fields) fields = [];
@@ -61,7 +61,7 @@ class RegionsJS {
 
     return new Promise((resolve, reject) => {
 
-      if (!id) reject(error(400, "id parameter missing"));
+      if (!id) reject(this.error(400, "id parameter missing"));
       fields = this._fields(fields);
 
       this.execute('get', {id, fields})
@@ -84,7 +84,7 @@ class RegionsJS {
 
     return new Promise((resolve, reject) => {
 
-      if (!options.id) reject(error(400, "ID parameter missing"));
+      if (!options.id) reject(this.error(400, "ID parameter missing"));
 
       this.execute('neighbour', options)
         .then((response) => {
@@ -117,19 +117,19 @@ class RegionsJS {
       };
 
       request.get(options, (err, response, body) => {
-        if(err) reject(error(404,err));
+        if(err) reject(this.error(404,err));
         else {
 
-          if(response.statusCode !== 200) reject(error(404, `Unable to connect to the API endpoint ${options.url}`));
-          else if (response.body.error_msg) reject(error(400, response.body.error_msg));
+          if(response.statusCode !== 200) reject(this.error(404, `Unable to connect to the API endpoint ${options.url}`));
+          else if (response.body.error_msg) reject(this.error(400, response.body.error_msg));
 
           if(body){
             try {
               resolve(JSON.parse(response.body));
             } catch (e) {
-              reject(error(500, e));
+              reject(this.error(500, e));
             }
-          } else reject(error(response.statusCode, 'Empty body'));
+          } else reject(this.error(response.statusCode, 'Empty body'));
 
         }
       });

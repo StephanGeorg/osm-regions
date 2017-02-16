@@ -120,7 +120,7 @@ class RegionsJS {
         if(err) reject(this.error(404,err));
         else {
 
-          if(response.statusCode !== 200) reject(this.error(404, `Unable to connect to the API endpoint ${options.url}`));
+          if(response.statusCode !== 200) reject(this.error(response.statusCode, `Unable to connect to the API endpoint ${options.url}`));
           else if (response.body.error_msg) reject(this.error(400, response.body.error_msg));
 
           if(body){

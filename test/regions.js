@@ -109,6 +109,16 @@ describe('OSMRegions API Wrapper', function(){
         }).catch(function(err){ console.log(err); });
       });
 
+      it('should return NEIGHBOURS for 1543125', function(done) {
+        osm.getId({
+          id: 1543125,
+          fields: ['neighbours']
+        }).then(function(res) {
+          res.should.be.a.Object;
+          done();
+        }).catch(function(err){ console.log(err); });
+      });
+
 
     });
 

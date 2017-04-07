@@ -12,7 +12,7 @@ class RegionsJS {
   constructor (options = {}) {
 
     this.options = options;
-    this.endpoint = this.options.endpoint || 'https://api.luftlinie.org/api/';
+    this.endpoint = this.options.endpoint || 'https://api.luftlinie.org/api/regions/';
 
   }
 

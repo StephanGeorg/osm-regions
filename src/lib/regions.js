@@ -23,10 +23,9 @@ class RegionsJS {
    *          * lng: Longitude
    *          * fields: Return the full response
    */
-  getRegions (options) {
+  getRegions (options = {}) {
 
-    let { lat, lng, fields } = options;
-
+    let { lat, lng, fields, level } = options;
     return new Promise((resolve, reject) => {
 
       if (!lat && !lng) reject(this.error(400, "Lat/Lng parameter missing"));
@@ -39,7 +38,7 @@ class RegionsJS {
       fields.push('osm_id');
       fields = _.uniq(fields).join();
 
-      this.execute('region', {lat, lng, fields })
+      this.execute('region', {lat, lng, fields, level })
         .then((response) => {
           resolve(this._parse(response));
         })

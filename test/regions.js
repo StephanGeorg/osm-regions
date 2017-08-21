@@ -45,7 +45,7 @@ describe('OSMRegions API Wrapper', function(){
           level: 2,
         }).then(function(res) {
           res.should.be.a.Array;
-          //res.should.have.length(1);
+          res.should.have.length(1);
           done();
         }).catch(function (err) { console.log(err); });
       });

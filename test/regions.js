@@ -1,4 +1,4 @@
-var should = require('should');
+var should = require('chai').should();
 var RegionsJS  = require('../src/index');
 var API_KEY = 'YOUR_API_KEY';
 
@@ -16,7 +16,7 @@ describe('OSMRegions API Wrapper', function(){
 
   });
 
-  describe('API responses', function() {
+  describe('OSM DB responses', function() {
 
     beforeEach(function(done){
       osm = new RegionsJS({
@@ -32,7 +32,7 @@ describe('OSMRegions API Wrapper', function(){
           lat: 52.554123413243,
           lng: 13.213412344
         }).then(function(res) {
-          res.should.be.a.Array;
+          res.should.be.a('array');
           res.should.have.length(4);
           done();
         }).catch(function (err) { console.log(err); });
@@ -44,7 +44,7 @@ describe('OSMRegions API Wrapper', function(){
           lng: 13.213412344,
           level: 2,
         }).then(function(res) {
-          res.should.be.a.Array;
+          res.should.be.a('array');
           res.should.have.length(1);
           done();
         }).catch(function (err) { console.log(err); });
@@ -58,7 +58,7 @@ describe('OSMRegions API Wrapper', function(){
         osm.getId({
           id: 1543125
         }).then(function(res) {
-          res.should.be.a.Array;
+          res.should.be.a('array');
           res.should.have.length(1);
           done();
         }).catch(function(err){ console.log(err); });
@@ -68,7 +68,7 @@ describe('OSMRegions API Wrapper', function(){
         osm.getId({
           id: '1543125,51477'
         }).then(function(res) {
-          res.should.be.a.Array;
+          res.should.be.a('array');
           res.should.have.length(2);
           done();
         }).catch(function(err){ console.log(err); });
@@ -79,9 +79,9 @@ describe('OSMRegions API Wrapper', function(){
           id: 1543125,
           fields: ['rpath']
         }).then(function(res) {
-          res.should.be.a.Array;
+          res.should.be.a('array');
           res.should.have.length(1);
-          res[0].rpath.should.be.a.Array();
+          res[0].rpath.should.be.a('array');
           res[0].rpath.should.have.length(2);
           done();
         }).catch(function(err){ console.log(err); });
@@ -92,10 +92,10 @@ describe('OSMRegions API Wrapper', function(){
           id: 1543125,
           fields: ['way']
         }).then(function(res) {
-          res.should.be.a.Array;
+          res.should.be.a('array');
           res.should.have.length(1);
-          res[0].way.should.be.a.Object();
-          res[0].way.geometry.coordinates.should.be.a.Array();
+          res[0].way.should.be.a('object');
+          res[0].way.geometry.coordinates.should.be.a('array');
           // res[0].way.geometry.coordinates.should.have.length(17);
           done();
         }).catch(function(err){ console.log(err); });
@@ -106,10 +106,10 @@ describe('OSMRegions API Wrapper', function(){
           id: 1543125,
           fields: ['center']
         }).then(function(res) {
-          res.should.be.a.Array;
+          res.should.be.a('array');
           res.should.have.length(1);
-          res[0].center.should.be.a.Object();
-          res[0].center.geometry.coordinates.should.be.a.Array();
+          res[0].center.should.be.a('object');
+          res[0].center.geometry.coordinates.should.be.a('array');
           res[0].center.geometry.coordinates.should.have.length(2);
           done();
         }).catch(function(err){ console.log(err); });
@@ -120,10 +120,10 @@ describe('OSMRegions API Wrapper', function(){
           id: 1543125,
           fields: ['bbox']
         }).then(function(res) {
-          res.should.be.a.Array;
+          res.should.be.a('array');
           res.should.have.length(1);
-          res[0].bbox.should.be.a.Object();
-          res[0].bbox.geometry.coordinates.should.be.a.Array();
+          res[0].bbox.should.be.a('object');
+          res[0].bbox.geometry.coordinates.should.be.a('array');
           res[0].bbox.geometry.coordinates[0].should.have.length(5);
           done();
         }).catch(function(err){ console.log(err); });
@@ -134,9 +134,9 @@ describe('OSMRegions API Wrapper', function(){
           id: 1543125,
           fields: ['area']
         }).then(function(res) {
-          res.should.be.a.Array;
+          res.should.be.a('array');
           res.should.have.length(1);
-          res[0].area.should.be.Number();
+          res[0].area.should.be.a('number');
 
           done();
         }).catch(function(err){ console.log(err); });
@@ -147,11 +147,11 @@ describe('OSMRegions API Wrapper', function(){
           id: 1543125,
           fields: ['neighbours']
         }).then(function(res) {
-          res.should.be.a.Array;
+          res.should.be.a('array');
           res.should.have.length(1);
-          res[0].rpath.should.be.Array();
+          res[0].rpath.should.be.a('array');
           res[0].rpath.should.have.length(2);
-          res[0].neighbours.should.be.Array();
+          res[0].neighbours.should.be.a('array');
           res[0].neighbours.should.have.length(5);
           done();
         }).catch(function(err){ console.log(err); });
@@ -167,7 +167,7 @@ describe('OSMRegions API Wrapper', function(){
       osm.getNeighbours({
         id: 62771,
       }).then(function(res) {
-        res.should.be.a.Array();
+        res.should.be.a('array');
         res.should.have.length(12);
         done();
       }).catch(function(err){ console.log(err); });

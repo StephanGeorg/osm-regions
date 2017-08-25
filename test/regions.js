@@ -1,25 +1,19 @@
-var should = require('chai').should();
-var RegionsJS  = require('../src/index');
-var API_KEY = 'YOUR_API_KEY';
+const should = require('chai').should();
+const RegionsJS  = require('../src/index');
 
 describe('OSMRegions API Wrapper', function(){
-  var osmregions;
 
   describe('Initializating', function() {
-
     it('without any arguments', function() {
       (function() {
-        osmregions = new RegionsJS();
+        regions = new RegionsJS();
       }).should.not.throw();
     });
-
-
   });
 
   describe('OSM DB responses', function() {
-
     beforeEach(function(done){
-      osm = new RegionsJS({
+      regions = new RegionsJS({
         // endpoint: 'http://localhost:1234/'
       });
       done();
@@ -28,7 +22,7 @@ describe('OSMRegions API Wrapper', function(){
     describe('Responses from REVERSE endpoint ', function() {
 
       it('should return all regions for (52.55.., 13.21..)', function(done) {
-        osm.getRegions({
+        regions.reverse({
           lat: 52.554123413243,
           lng: 13.213412344
         }).then(function(res) {
@@ -39,7 +33,7 @@ describe('OSMRegions API Wrapper', function(){
       });
 
       it('should return admin_level=2 region for (52.55.., 13.21..)', function(done) {
-        osm.getRegions({
+        regions.reverse({
           lat: 52.554123413243,
           lng: 13.213412344,
           level: 2,
@@ -55,7 +49,7 @@ describe('OSMRegions API Wrapper', function(){
     describe('Responses from GET endpoint ', function() {
 
       it('should return SINGLE region 1543125', function(done) {
-        osm.getId({
+        regions.get({
           id: 1543125
         }).then(function(res) {
           res.should.be.a('array');
@@ -65,7 +59,7 @@ describe('OSMRegions API Wrapper', function(){
       });
 
       it('should return MULTIPLE region 1543125,51477', function(done) {
-        osm.getId({
+        regions.get({
           id: '1543125,51477'
         }).then(function(res) {
           res.should.be.a('array');
@@ -75,7 +69,7 @@ describe('OSMRegions API Wrapper', function(){
       });
 
       it('should return RPATH for 1543125', function(done) {
-        osm.getId({
+        regions.get({
           id: 1543125,
           fields: ['rpath']
         }).then(function(res) {
@@ -88,7 +82,7 @@ describe('OSMRegions API Wrapper', function(){
       });
 
       it('should return WAY for 1543125', function(done) {
-        osm.getId({
+        regions.get({
           id: 1543125,
           fields: ['way']
         }).then(function(res) {
@@ -102,7 +96,7 @@ describe('OSMRegions API Wrapper', function(){
       });
 
       it('should return CENTER for 1543125', function(done) {
-        osm.getId({
+        regions.get({
           id: 1543125,
           fields: ['center']
         }).then(function(res) {
@@ -116,7 +110,7 @@ describe('OSMRegions API Wrapper', function(){
       });
 
       it('should return BBOX for 1543125', function(done) {
-        osm.getId({
+        regions.get({
           id: 1543125,
           fields: ['bbox']
         }).then(function(res) {
@@ -130,7 +124,7 @@ describe('OSMRegions API Wrapper', function(){
       });
 
       it('should return AREA for 1543125', function(done) {
-        osm.getId({
+        regions.get({
           id: 1543125,
           fields: ['area']
         }).then(function(res) {
@@ -143,7 +137,7 @@ describe('OSMRegions API Wrapper', function(){
       });
 
       it('should return NEIGHBOURS for 1543125', function(done) {
-        osm.getId({
+        regions.get({
           id: 1543125,
           fields: ['neighbours']
         }).then(function(res) {
@@ -164,7 +158,7 @@ describe('OSMRegions API Wrapper', function(){
   describe('Responses from NEIGHBOURS endpoint ', function() {
 
     it('should return neighbours for 62771', function(done) {
-      osm.getNeighbours({
+      regions.neighbours({
         id: 62771,
       }).then(function(res) {
         res.should.be.a('array');
@@ -176,6 +170,21 @@ describe('OSMRegions API Wrapper', function(){
 
   });
 
+
+  describe('Additional responses from mongodb', function() {
+
+    /*it('should return neighbours for 62771', function(done) {
+      osm.getNeighbours({
+        id: 62771,
+      }).then(function(res) {
+        res.should.be.a('array');
+        res.should.have.length(12);
+        done();
+      }).catch(function(err){ console.log(err); });
+    });*/
+
+
+  });
 
 
 

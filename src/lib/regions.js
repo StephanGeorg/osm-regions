@@ -23,7 +23,7 @@ class RegionsJS {
    *          * lng: Longitude
    *          * fields: Return the full response
    */
-  getRegions (options = {}) {
+  reverse (options = {}) {
 
     let { lat, lng, fields, level } = options;
     return new Promise((resolve, reject) => {
@@ -47,6 +47,10 @@ class RegionsJS {
         });
     });
   }
+  // Backwarts compatibility
+  getRegions (options = {}) {
+    return this.reverse(options);
+  }
 
   /**
    * Return a region based on the osm_id
@@ -54,7 +58,7 @@ class RegionsJS {
    *          * id: osm_id
    *          * fields: (way)
    */
-  getId (options) {
+  get (options = {}) {
 
     let { id, fields } = options;
 
@@ -72,6 +76,10 @@ class RegionsJS {
         });
       });
   }
+  // Backwarts compatibility
+  getId (options = {}) {
+    return this.get(options);
+  }
 
   /**
    * Return a neighbour regions based on osm_id
@@ -79,7 +87,7 @@ class RegionsJS {
    *          * id: osm_id
    *          * level: (optional) admin_level (default: same as from osm_id)
    */
-  getNeighbours (options) {
+  neighbours (options = {}) {
 
     return new Promise((resolve, reject) => {
 
@@ -93,6 +101,10 @@ class RegionsJS {
           reject(err);
         });
     });
+  }
+  // Backwarts compatibility
+  getNeighbours (options = {}) {
+    return this.neighbours(options);
   }
 
   /**

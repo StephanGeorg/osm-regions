@@ -170,22 +170,37 @@ describe('OSMRegions API Wrapper', function(){
 
   });
 
-
-  describe('Additional responses from mongodb', function() {
-
-    /*it('should return neighbours for 62771', function(done) {
-      osm.getNeighbours({
-        id: 62771,
-      }).then(function(res) {
-        res.should.be.a('array');
-        res.should.have.length(12);
-        done();
-      }).catch(function(err){ console.log(err); });
-    });*/
-
-
   });
 
+  describe('MONGO DB responses', function() {
+
+    it('should return (get) structure for 51477', function(done) {
+      regions.get({
+        id: 51477,
+        fields: 'additional.structure'
+      }).then(function(res) {
+        res.should.be.a('array');
+        res.should.have.length(1);
+        res[0].should.have.property('additional');
+        res[0].additional.structure.borders.int.should.have.length(9);
+        done();
+      }).catch(function(err){ console.log(err); });
+    });
+
+    it('should return (reverse) structure for 51477', function(done) {
+      regions.reverse({
+        lat: 52.554123413243,
+        lng: 13.213412344,
+        level: 2,
+        fields: 'additional.structure'
+      }).then(function(res) {
+        res.should.be.a('array');
+        res.should.have.length(1);
+        res[0].should.have.property('additional');
+        res[0].additional.structure.borders.int.should.have.length(9);
+        done();
+      }).catch(function(err){ console.log(err); });
+    });
 
 
   });

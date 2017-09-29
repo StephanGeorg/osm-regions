@@ -187,7 +187,7 @@ describe('OSMRegions API Wrapper', function(){
       }).catch(function(err){ console.log(err); });
     });
 
-    it('should return (reverse) structure for 51477', function(done) {
+    it('should return () structure for 51477', function(done) {
       regions.reverse({
         lat: 52.554123413243,
         lng: 13.213412344,

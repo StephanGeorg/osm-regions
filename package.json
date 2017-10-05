@@ -1,6 +1,6 @@
 {
   "name": "regionsjs",
-  "description": "Wrapper for the OSM regions API",
+  "description": "Node.js wrapper for the RegionsAPI",
   "main": "./dist/index.js",
   "version": "0.3.0",
   "private": false,

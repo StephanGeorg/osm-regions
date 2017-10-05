@@ -3,7 +3,7 @@ const RegionsJS = require('../src/index');
 
 let regions;
 
-describe('OSMRegions API Wrapper', () => {
+describe('RegionsAPI API Wrapper', () => {
   describe('Initializating', () => {
     it('without any arguments', (done) => {
       regions = new RegionsJS();

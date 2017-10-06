@@ -1,5 +1,5 @@
-const request  = require('request');
-const  _ = require('lodash');
+const request = require('request');
+const _ = require('lodash');
 
 /**
  * OSMRegions API wrapper
@@ -8,12 +8,9 @@ const  _ = require('lodash');
  * @return Instance of {@link OSMRegions}
  */
 class RegionsJS {
-
-  constructor (options = {}) {
-
+  constructor(options = {}) {
     this.options = options;
     this.endpoint = this.options.endpoint || 'https://api.luftlinie.org/api/regions/';
-
   }
 
   /**
@@ -21,26 +18,26 @@ class RegionsJS {
    * @param  {[object]}   options  must contain the following properties:
    *          * lat: Latitude
    *          * lng: Longitude
-   *          * fields: Return the full response
+   *          * fields: [String] Return the full response
    */
-  reverse (options = {}) {
-
-    let { lat, lng, fields, level } = options;
+  reverse(options = {}) {
+    const { lat, lng, level } = options;
+    let { fields } = options;
     return new Promise((resolve, reject) => {
+      if (!lat && !lng) reject(this.error(400, 'Lat/Lng parameter missing'));
+      if (!checkLat(lat)) reject(this.error(400, 'Latitude malformed'));
+      if (!checkLng(lng)) reject(this.error(400, 'Longitude malformed'));
 
-      if (!lat && !lng) reject(this.error(400, "Lat/Lng parameter missing"));
-      if (!checkLat(lat)) reject(this.error(400, "Latitude malformed"));
-      if (!checkLng(lng)) reject(this.error(400, "Longitude malformed"));
+      fields = this.getFields(fields);
 
-      fields = this._fields(fields);
-      if (!fields) fields = [];
-      else fields = fields.split(',');
-      fields.push('osm_id');
-      fields = _.uniq(fields).join();
-
-      this.execute('region', {lat, lng, fields, level })
+      this.execute('region', {
+        lat,
+        lng,
+        fields,
+        level,
+      })
         .then((response) => {
-          resolve(this._parse(response));
+          resolve(this.parseResponse(response));
         })
         .catch((err) => {
           reject(err);
@@ -48,7 +45,7 @@ class RegionsJS {
     });
   }
   // Backwarts compatibility
-  getRegions (options = {}) {
+  getRegions(options = {}) {
     return this.reverse(options);
   }
 
@@ -56,29 +53,58 @@ class RegionsJS {
    * Return a region based on the osm_id
    * @param  {[object]}   options  Can contain the following properties:
    *          * id: osm_id
-   *          * fields: (way)
+   *          * fields: [String] (way)
    */
-  get (options = {}) {
-
-    let { id, fields } = options;
+  get(options = {}) {
+    const { id } = options;
+    let { fields } = options;
 
     return new Promise((resolve, reject) => {
+      if (!id) reject(this.error(400, 'id parameter missing'));
+      fields = this.getFields(fields);
 
-      if (!id) reject(this.error(400, "id parameter missing"));
-      fields = this._fields(fields);
-
-      this.execute('get', {id, fields})
+      this.execute('get', { id, fields })
         .then((response) => {
-          resolve(this._parse(response));
+          resolve(this.parseResponse(response));
         })
         .catch((err) => {
           reject(err);
         });
-      });
+    });
   }
   // Backwarts compatibility
-  getId (options = {}) {
+  getId(options = {}) {
     return this.get(options);
+  }
+
+  /**
+   * Search regions by path or name based on Lat/Lng
+   * @param  {[object]}   options  must contain on of the following two properties:
+   *          * path: Path of a region (i.e. Germany/Berlin)
+   *          * name: Name of a region (i.e. Rome)
+   *          *
+   *          * fields: [String] Return the full response
+   */
+  search(options = {}) {
+    const { path, name } = options;
+    let { fields } = options;
+    return new Promise((resolve, reject) => {
+      if (!name && !path) reject(this.error(400, 'Please secify path or name.'));
+
+      fields = this.getFields(fields);
+
+      this.execute('search', {
+        path,
+        name,
+        fields,
+      })
+        .then((response) => {
+          resolve(this.parseResponse(response));
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
   }
 
   /**
@@ -87,23 +113,19 @@ class RegionsJS {
    *          * id: osm_id
    *          * level: (optional) admin_level (default: same as from osm_id)
    */
-  neighbours (options = {}) {
-
+  neighbours(options = {}) {
     return new Promise((resolve, reject) => {
-
-      if (!options.id) reject(this.error(400, "ID parameter missing"));
+      if (!options.id) reject(this.error(400, 'ID parameter missing'));
 
       this.execute('neighbour', options)
         .then((response) => {
-          resolve(this._parse(response));
+          resolve(this.parseResponse(response));
         })
-        .catch((err)=> {
-          reject(err);
-        });
+        .catch(reject);
     });
   }
   // Backwarts compatibility
-  getNeighbours (options = {}) {
+  getNeighbours(options = {}) {
     return this.neighbours(options);
   }
 
@@ -115,33 +137,26 @@ class RegionsJS {
    * @param  {[type]}   params   Object containg parameters to call the API with
    * @param  {Function} Promise
    */
-  execute (method, params) {
-
+  execute(method, params) {
     return new Promise((resolve, reject) => {
-
-      //var finalParams = _.extend({ key:  this.apiKey }, params);
       const finalParams = params;
-
       const options = {
         url: this.endpoint + method,
-        qs: finalParams
+        qs: finalParams,
       };
 
       request.get(options, (err, response, body) => {
-        if(err) reject(this.error(404,err));
+        if (err) reject(this.error(404, err));
         else {
-
-          if(response.statusCode !== 200) reject(this.error(response.statusCode, `Unable to connect to the API endpoint ${options.url}`));
+          if (response.statusCode !== 200) reject(this.error(response.statusCode, `Unable to connect to the API endpoint ${options.url}`));
           else if (response.body.error_msg) reject(this.error(400, response.body.error_msg));
-
-          if(body){
+          if (body) {
             try {
               resolve(JSON.parse(response.body));
             } catch (e) {
               reject(this.error(500, e));
             }
           } else reject(this.error(response.statusCode, 'Empty body'));
-
         }
       });
     });
@@ -151,17 +166,13 @@ class RegionsJS {
    * Return parsed response
    * @param  {[object]}   response  A response from the API
    */
-  _parse (response) {
-
-    response.forEach((reg,i) => {
-
+  parseResponse(response) {
+    response.forEach((reg, i) => {
       if (reg.way && typeof reg.way === 'string') response[i].way = JSON.parse(reg.way);
       if (reg.center && typeof reg.center === 'string') response[i].center = JSON.parse(reg.center);
       if (reg.bbox && typeof reg.bbox === 'string') response[i].bbox = JSON.parse(reg.bbox);
       if (reg.osm_id && typeof reg.osm_id === 'string') response[i].osm_id = parseInt(reg.osm_id);
-
     });
-
     return response;
   }
 
@@ -169,8 +180,10 @@ class RegionsJS {
    * Return parsed fields
    * @param  {[object]}   response  A response from the API
    */
-  _fields (fields) {
-    return _.isArray(fields) ? fields.join() : fields;
+  getFields(fields = ['osm_id']) {
+    if (_.isString(fields)) fields = fields.split(',');
+    fields.push('osm_id');
+    return _.uniq(fields).join();
   }
 
   error (msg, code) {

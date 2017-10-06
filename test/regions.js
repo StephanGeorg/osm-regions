@@ -70,7 +70,7 @@ describe('RegionsAPI API Wrapper', () => {
       it('should return RPATH for 1543125', (done) => {
         regions.get({
           id: 1543125,
-          fields: ['rpath'],
+          fields: ['rpath', 'osm_id'],
         }).then((res) => {
           res.should.be.a('array');
           res.should.have.length(1);
@@ -169,7 +169,7 @@ describe('RegionsAPI API Wrapper', () => {
     it('should return (get) structure for 51477', (done) => {
       regions.get({
         id: 51477,
-        fields: 'additional.structure',
+        fields: ['additional.structure'],
       }).then((res) => {
         res.should.be.a('array');
         res.should.have.length(1);
@@ -179,17 +179,30 @@ describe('RegionsAPI API Wrapper', () => {
       }).catch(console.log);
     });
 
-    it('should return () structure for 51477', (done) => {
+    it('should return (reverse) structure for 51477', (done) => {
       regions.reverse({
         lat: 52.554123413243,
         lng: 13.213412344,
         level: 2,
-        fields: 'additional.structure',
+        fields: ['additional.structure'],
       }).then((res) => {
         res.should.be.a('array');
         res.should.have.length(1);
         res[0].should.have.property('additional');
         res[0].additional.structure.borders.int.should.have.length(9);
+        done();
+      }).catch(console.log);
+    });
+  });
+  describe('Responses from SEARCH endpoint', () => {
+    it('should return region by Name', (done) => {
+      regions.search({
+        path: 'Germany/Berlin',
+      }).then((res) => {
+        res.should.be.a('array');
+        res.should.have.length(1);
+        // res[0].should.have.property('additional');
+        // res[0].additional.structure.borders.int.should.have.length(9);
         done();
       }).catch(console.log);
     });

@@ -195,14 +195,39 @@ describe('RegionsAPI API Wrapper', () => {
     });
   });
   describe('Responses from SEARCH endpoint', () => {
+    it('should return region by Path', (done) => {
+      regions.search({
+        path: 'Italy/Rome',
+      }).then((res) => {
+        res.should.be.a('array')
+          .and.have.length(1);
+        done();
+      }).catch(console.log);
+    });
+
     it('should return region by Name', (done) => {
       regions.search({
-        path: 'Germany/Berlin',
+        name: 'Berlin',
       }).then((res) => {
-        res.should.be.a('array');
-        res.should.have.length(1);
-        // res[0].should.have.property('additional');
-        // res[0].additional.structure.borders.int.should.have.length(9);
+        res.should.be.a('array')
+          .and.have.length(9);
+        done();
+      }).catch(console.log);
+    });
+
+    it('should return region by Path and OSM Data', (done) => {
+      regions.search({
+        path: 'Italy/Rome',
+        fields: ['center', 'bbox'],
+      }).then((res) => {
+        res.should.be.a('array')
+          .and.have.length(1);
+        res[0].should.have.nested.property('center.geometry.coordinates')
+          .and.to.be.an('array')
+          .and.to.have.length(2);
+        res[0].should.have.nested.property('bbox.geometry.coordinates')
+          .and.to.be.an('array')
+          .and.to.have.length(1);
         done();
       }).catch(console.log);
     });

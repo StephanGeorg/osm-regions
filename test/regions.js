@@ -14,7 +14,7 @@ describe('RegionsAPI API Wrapper', () => {
 
   describe('OSM DB responses', () => {
     beforeEach((done) => {
-      const regions = new RegionsJS({
+      regions = new RegionsJS({
         // endpoint: 'http://localhost:1234/'
       });
       done();

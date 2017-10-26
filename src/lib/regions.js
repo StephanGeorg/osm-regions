@@ -21,18 +21,21 @@ class RegionsJS {
    *          * fields: [String] Return the full response
    */
   reverse(options = {}) {
-    const { lat, lng, level } = options;
+    const {
+      lat, lng, level, bound,
+    } = options;
     let { fields } = options;
     return new Promise((resolve, reject) => {
-      if (!lat && !lng) reject(this.error(400, 'Lat/Lng parameter missing'));
-      if (!checkLat(lat)) reject(this.error(400, 'Latitude malformed'));
-      if (!checkLng(lng)) reject(this.error(400, 'Longitude malformed'));
+      // if (!lat && !lng) reject(this.error(400, 'Lat/Lng parameter missing'));
+      if (lat && !checkLat(lat)) reject(this.error(400, 'Latitude malformed'));
+      if (lng && !checkLng(lng)) reject(this.error(400, 'Longitude malformed'));
 
       fields = this.getFields(fields);
 
-      this.execute('region', {
+      this.execute('reverse', {
         lat,
         lng,
+        bound,
         fields,
         level,
       })

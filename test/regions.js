@@ -1,4 +1,5 @@
 const should = require('chai').should();
+const expect = require('chai').expect;
 const RegionsJS = require('../src/index');
 
 let regions;
@@ -44,6 +45,16 @@ describe('RegionsAPI API Wrapper', () => {
         }).catch(console.log);
       });
 
+      it('should return admin_level=2 || 4 region for (bound)', (done) => {
+        regions.reverse({
+          bound: '[[0,34.30714],[35.8593, 34.3071],[35.8593,48.6909],[0,48.6909],[0,34.30714]]',
+          level: 4,
+        }).then((res) => {
+          res.should.be.a('array');
+          // expect(res).to.have.length.around(472, 10);
+          done();
+        }).catch(console.log);
+      }).timeout(5000);
     });
 
     describe('Responses from GET endpoint ', () => {

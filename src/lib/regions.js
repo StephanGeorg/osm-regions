@@ -10,7 +10,7 @@ const _ = require('lodash');
 class RegionsJS {
   constructor(options = {}) {
     this.options = options;
-    this.endpoint = this.options.endpoint || 'https://api.luftlinie.org/api/regions/';
+    this.endpoint = this.options.endpoint || 'https://api.distance.to/api/regions/';
   }
 
   /**

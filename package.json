@@ -2,7 +2,7 @@
   "name": "regionsjs",
   "description": "Node.js wrapper for the RegionsAPI",
   "main": "./dist/index.js",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "private": false,
   "repository": {
     "type": "git",
